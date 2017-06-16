@@ -2,13 +2,11 @@
 
 import Koa from 'koa';
 import json from 'koa-json';
-import onerror from 'koa-onerror';
 import bodyparser from 'koa-bodyparser';
 import logger from 'koa-logger';
 import Router from './router';
 
 const app = new Koa();
-onerror(app);
 
 app.use(bodyparser({enableTypes: ['json']}));
 app.use(json());
