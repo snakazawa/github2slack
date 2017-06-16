@@ -8,3 +8,4 @@ script:
     - npm i
     - npm run lint:all
     - npm run flow
+    - npm run build

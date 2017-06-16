@@ -1,16 +1,18 @@
 {
   "env": {
-    "commonjs": true,
     "es6": true,
     "node": true
   },
-  "extends": "standard",
+  "extends": [
+    "standard",
+    "plugin:flowtype/recommended"
+  ],
   "parserOptions": {
     "sourceType": "module"
   },
-  "globals": {
-    "$": true
-  },
+  "plugins": [
+    "flowtype"
+  ],
   "rules": {
     "indent": [
       "error",

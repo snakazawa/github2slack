@@ -1,11 +1,10 @@
 const path = require('path');
-const webpack = require('webpack');
 
 // development
 const webpackConfig = {
     target: 'node',
     entry: {
-        app: path.join(__dirname, '/src/app.js'),
+        app: path.join(__dirname, '/src/app.js')
     },
     output: {
         publicPath: '/',

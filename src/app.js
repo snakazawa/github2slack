@@ -1,6 +1,4 @@
-/* @flow */
-'use strict';
-
+// @flow
 import Koa from 'koa';
 import type { KoaContext } from 'koa-flow-declarations/KoaContext';
 
