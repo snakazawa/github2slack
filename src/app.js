@@ -1,11 +1,30 @@
 // @flow
+
 import Koa from 'koa';
-import type { KoaContext } from 'koa-flow-declarations/KoaContext';
+import json from 'koa-json';
+import onerror from 'koa-onerror';
+import bodyparser from 'koa-bodyparser';
+import logger from 'koa-logger';
+import Router from './router';
 
 const app = new Koa();
+onerror(app);
 
-app.use(async (ctx: KoaContext) => {
-    ctx.body = 'Hello Koa';
+app.use(bodyparser({enableTypes: ['json']}));
+app.use(json());
+app.use(logger());
+
+// logger
+app.use(async (ctx, next) => {
+    const start = new Date();
+    await next();
+    const ms = new Date() - start;
+    console.log(`${ctx.method} ${ctx.url} - ${ms}ms`);
 });
 
-app.listen(3000);
+const router = new Router();
+app
+    .use(router.routes())
+    .use(router.allowedMethods());
+
+export default app;
