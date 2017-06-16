@@ -1,0 +1,15 @@
+*~
+*.swp
+*.log
+temp/
+tmp/
+
+.idea/
+*.iml
+
+node_modules/
+
+coverage/
+
+/config/*
+!/config/default.json

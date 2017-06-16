@@ -1,0 +1,84 @@
+@startuml
+class Router
+
+Router -> Controller.GitHubHookController
+Router -> Controller.IndexController
+
+namespace Controller {
+    class GitHubHookController {
+        + {static} void postIndex (Request req, Response res)
+    }
+
+    GitHubHookController --> Serializer.SerializerMaster
+    GitHubHookController --> Sender.SlackSender
+
+    class IndexController {
+        + {static} void notFound (Request req, Response res)
+        + {static} void internalServerError (Error err, Request req, Response res)
+    }
+}
+
+namespace Serializer {
+    class SerializerMaster {
+        + SerializerMaster constructor ([String packageName])
+        + Promise<Message> serialize (String eventName, Object payload)
+        - SerializerAbstract findSerializer (String packageName, String eventName)
+    }
+
+    abstract class SerializerAbstract {
+        + {abstract} Promise<Message> serialize (Object payload)
+        + {abstract} get String eventName ()
+    }
+    
+    SerializerMaster *-- SerializerAbstract
+    SerializerAbstract --> Model.Message
+    SerializerAbstract --> GitHub.GitHubAPI
+
+    namespace JpnSerializer {
+        class IssuesSerializer
+        class CommitCommentsSerializer
+        class GollumSerializer
+        
+        IssuesSerializer --|> Serializer.SerializerAbstract
+        CommitCommentsSerializer --|> Serializer.SerializerAbstract
+        GollumSerializer --|> Serializer.SerializerAbstract
+    }
+}
+
+namespace Sender {
+    class SlackSender {
+        - String _team
+        - String _channel
+        - String _token
+        - String _botName
+        - String _botIcon
+        + SlackSender constructor ([Object defaultParams])
+        + Promise<void> send (Message msg, Object params = {})
+    }
+
+    SlackSender --> Model.Message
+}
+
+namespace Model {
+    class Message {
+        - String _text
+        - MessageType _type
+        + Message constructor (String text, MessageType type)
+        + get String text()
+        + get String type()
+    }
+
+    enum MessageType
+
+    Message --> MessageType
+}
+
+namespace GitHub {
+    class GitHubAPI {
+        - String _token
+        - GitHub _api
+        + GitHubAPI constructor ([String token])
+    }
+}
+
+@enduml

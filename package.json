@@ -1,0 +1,33 @@
+{
+  "name": "github2slack",
+  "version": "0.0.0",
+  "private": true,
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "lint": "eslint",
+    "lint:all": "eslint . --ext .js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/snakazawa/github2slack.git"
+  },
+  "author": "snakazawa",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/snakazawa/github2slack/issues"
+  },
+  "homepage": "https://github.com/snakazawa/github2slack#readme",
+  "engines": {
+    "node": "~8.1.2"
+  },
+  "dependencies": {
+    "eslint": "^4.0.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.3.0",
+    "eslint-plugin-node": "^5.0.0",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "koa": "^2.2.0"
+  }
+}
