@@ -11,7 +11,7 @@ export type Payload$Issue = {
     body: string,
     user: Payload$User,
     labels: Array<Payload$Label>,
-    state: 'open'|'closed',
+    state: 'open' | 'closed',
     assignees: Array<Payload$Issue>
 };
 
@@ -21,6 +21,6 @@ export class Payload {
 
     constructor (params: any = {}) {
         this.repository = params.repository;
-        this.sender = params.sender
+        this.sender = params.sender;
     }
 }

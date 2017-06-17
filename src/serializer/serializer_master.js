@@ -19,7 +19,7 @@ export default class SerializerMaster {
         const payload = this.formatToPayload(eventName, body);
         const serializer = this.findSerializer(this.packageName, eventName);
         if (!serializer) { throw new Error(`serializer was not found: ${this.packageName}.${eventName}`); }
-        return await serializer.serialize(payload);
+        return serializer.serialize(payload);
     }
 
     findSerializer (packageName: string, eventName: string): ?ISerializer<*> {

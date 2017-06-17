@@ -5,11 +5,15 @@ import Message from '../../model/message';
 import { messageTypes } from '../../model/message_types';
 
 export default class IssuesSerializer implements ISerializer<IssuesPayload> {
-    eventName: string = 'IssuesEvent';
+    eventName: string;
+
+    constructor () {
+        this.eventName = 'IssuesEvent';
+    }
 
     async serialize (payload: IssuesPayload): Promise<Message> {
         const {name: reponame} = payload.repository;
-        const {url, number, title, labels, assignees, body} = payload.issue;
+        const {url, number, title} = payload.issue;
         const {login: sender} = payload.sender;
 
         const text = `[${reponame} ${sender} が新しいIssueを作成しました <#${number} ${title}|${url}>]`;

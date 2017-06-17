@@ -11,7 +11,11 @@ export default class Message {
         this._type = type;
     }
 
-    get text(): string { return this._text; }
+    get text (): string {
+        return this._text;
+    }
 
-    get type(): MessageType { return this._type; }
+    get type (): MessageType {
+        return this._type;
+    }
 }
