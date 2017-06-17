@@ -1,6 +1,6 @@
 // @flow
 
-class IndexController {
+export default class IndexController {
     static async getIndex (ctx: Koa$Context) {
         ctx.body = 'Hello Koa 2!';
     }
@@ -20,5 +20,3 @@ class IndexController {
         }
     }
 }
-
-export default IndexController;

@@ -6,7 +6,7 @@ import bodyparser from 'koa-bodyparser';
 import logger from 'koa-logger';
 import Router from './router';
 
-const app = new Koa();
+export default const app = new Koa();
 
 app.use(bodyparser({enableTypes: ['json']}));
 app.use(json());
@@ -24,5 +24,3 @@ const router = new Router();
 app
     .use(router.routes())
     .use(router.allowedMethods());
-
-export default app;

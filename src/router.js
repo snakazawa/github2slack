@@ -3,7 +3,7 @@ import KoaRouter from 'koa-router';
 import IndexController from './controller/index_controller';
 import GitHubHookController from './controller/github_hook_controller';
 
-class Router extends KoaRouter {
+export default class Router extends KoaRouter {
     constructor () {
         super();
 
@@ -14,5 +14,3 @@ class Router extends KoaRouter {
         this.post('/github/hook', GitHubHookController.postIndex);
     }
 }
-
-export default Router;

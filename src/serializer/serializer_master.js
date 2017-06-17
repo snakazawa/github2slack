@@ -2,7 +2,7 @@
 import type { ISerializer } from './i_serializer';
 import type Message from '../model/message';
 
-class SerializerMaster {
+export default class SerializerMaster {
     packageName: string;
     constructor (packageName: ?string) {
         this.packageName = packageName == null ? 'DefaultSerializer' : packageName;
@@ -16,5 +16,3 @@ class SerializerMaster {
     findSerializer (packageName: string, eventName: string): ISerializer {
     }
 }
-
-export default SerializerMaster;
