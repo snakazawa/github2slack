@@ -7,3 +7,4 @@ node_modules/iflow-koa/index.js.flow
 node_modules/iflow-koa-router/index.js.flow
 
 [options]
+unsafe.enable_getters_and_setters=true

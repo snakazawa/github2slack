@@ -6,15 +6,15 @@ Router -> Controller.IndexController
 
 namespace Controller {
     class GitHubHookController {
-        + {static} void postIndex (Request req, Response res)
+        + {static} void postIndex (Koa.Context ctx)
     }
 
     GitHubHookController --> Serializer.SerializerMaster
     GitHubHookController --> Sender.SlackSender
 
     class IndexController {
-        + {static} void notFound (Request req, Response res)
-        + {static} void internalServerError (Error err, Request req, Response res)
+        + {static} void notFound (Koa.Context ctx)
+        + {static} void internalServerError (Koa.Context ctx, Koa.Next next)
     }
 }
 
@@ -25,9 +25,9 @@ namespace Serializer {
         - SerializerAbstract findSerializer (String packageName, String eventName)
     }
 
-    abstract class SerializerAbstract {
-        + {abstract} Promise<Message> serialize (Object payload)
-        + {abstract} get String eventName ()
+    interface SerializerAbstract {
+        + Promise<Message> serialize (Object payload)
+        + String eventName
     }
     
     SerializerMaster *-- SerializerAbstract

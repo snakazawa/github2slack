@@ -7,9 +7,10 @@
     "start": "node dist/www.js",
     "lint": "eslint",
     "lint:all": "eslint . --ext .js",
+    "flow": "flow",
     "build": "webpack",
     "watch": "webpack --watch",
-    "flow": "flow"
+    "check": "npm run lint:all && npm run flow"
   },
   "repository": {
     "type": "git",
