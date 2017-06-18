@@ -99,7 +99,7 @@ export default class IssuesSerializer implements ISerializer<IssuesPayload> {
     }
 
     _assigneesToString (assignees: Array<Payload$User>): string {
-        if (!assignees.length) { return '担当者: なし'; }
+        if (!assignees || !assignees.length) { return '担当者: なし'; }
 
         return '担当者: ' + assignees
             .map((user: Payload$User) => `<${user.url}|@${user.login}>`)

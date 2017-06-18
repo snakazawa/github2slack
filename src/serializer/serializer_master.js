@@ -28,19 +28,19 @@ export default class SerializerMaster {
         }
 
         switch (eventName) {
-        case 'IssuesEvent':
+        case 'issues':
             if (!this.serializers.issues) {
                 throw new Error(`serializer was not found: ${this.packageName}.IssuesEvent`);
             }
             return this.serializers.issues.serialize(new IssuesPayload(body));
 
-        case 'IssueCommentEvent':
+        case 'issue_comment':
             if (!this.serializers.issueComment) {
                 throw new Error(`serializer was not found: ${this.packageName}.IssueCommentEvent`);
             }
             return this.serializers.issueComment.serialize(new IssueCommentPayload(body));
 
-        case 'GollumEvent':
+        case 'gollum':
             if (!this.serializers.gollum) {
                 throw new Error(`serializer was not found: ${this.packageName}.GollumEvent`);
             }
