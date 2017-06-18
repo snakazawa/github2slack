@@ -16,6 +16,19 @@ export type Payload$Issue = {
     assignees: Array<Payload$User>,
     milestone?: Payload$Milestone
 };
+export type Payload$Comment = {
+    url: string,
+    user: Payload$User,
+    body: string
+};
+export type Payload$Page = {
+    page_name: string,
+    title: string,
+    action: string,
+    sha: string,
+    html_url: string
+};
+
 
 export class Payload {
     repository: Payload$Repository;
