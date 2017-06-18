@@ -2,12 +2,40 @@
 
 [![Build Status](https://travis-ci.org/snakazawa/github2slack.svg?branch=master)](https://travis-ci.org/snakazawa/github2slack)
 
-github2slack sends GitHub notifications to slack.  
-This is simply and high customizable.
+Simply and customizable GitHub-Slack notifier. 
+
+GitHubの通知をSlackに飛ばす通知システムです。  
+シンプルかつカスタマイズ性が高いのが特徴です。
+
+## Features
+
+### JpnSerializer
+
+日本語の通知を送ります。
+
+Support events:
+
+- [x] IssuesEvent
+- [x] IssueCommentEvent
+- [x] GollumEvent
+- [ ] (**TODO**) CommitCommentEvent
+- [ ] (**TODO**) PushEvent
+- [ ] (**TODO**) CreateEvent
+- [ ] (**TODO**) DeleteEvent
+- [ ] (**TODO**) LabelEvent
+- [ ] (**TODO**) MilestoneEvent
+- [ ] (**TODO**) ProjectCardEvent
+- [ ] (**TODO**) ProjectColumnEvent
+- [ ] (**TODO**) ProjectEvent
+- [ ] (**TODO**) PullRequestEvent
+- [ ] (**TODO**) PullRequestReviewEvent
+- [ ] (**TODO**) PullRequestReviewCommentEvent
 
 ## Requirements
 
-**TODO**
+- node: ~8.1.2
+- git
+
 
 ## Install
 
