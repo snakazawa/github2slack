@@ -1,9 +1,8 @@
 // @flow
-import type { ISerializer } from './i_serializer';
-import { Payload } from '../model/github/payload';
 import { IssuesPayload } from '../model/github/issues_payload';
 import type Message from '../model/message';
 import JpnSerializer from './JpnSerializer';
+import type { Serializers } from './serializers_type';
 
 const serializerPackages = {
     JpnSerializer: JpnSerializer
@@ -11,29 +10,28 @@ const serializerPackages = {
 
 export default class SerializerMaster {
     packageName: string;
+    serializers: Serializers;
+
     constructor (packageName: ?string) {
-        this.packageName = packageName == null ? 'JpnSerializer' : packageName;
+        this.packageName = packageName || 'JpnSerializer';
+
+        const serializers = serializerPackages[this.packageName];
+        if (!serializers) { throw new Error(`serializer package was not found: ${this.packageName}`); }
+        this.serializers = serializers;
     }
 
-    async serialize (eventName: string, body: any): Promise<?Message> {
-        const payload = this.formatToPayload(eventName, body);
-        const serializer = this.findSerializer(this.packageName, eventName);
-        if (!serializer) { throw new Error(`serializer was not found: ${this.packageName}.${eventName}`); }
-        return serializer.serialize(payload);
-    }
+    async serialize (eventName: string, body: any): Promise<Message> {
+        if (!body) {
+            throw new Error('invalid body: (empty)');
+        }
 
-    findSerializer (packageName: string, eventName: string): ?ISerializer<*> {
-        const serializers = serializerPackages[packageName];
-        if (!serializers) { return null; }
-        return serializers[eventName];
-    }
-
-    formatToPayload (eventName: string, body: any): Payload {
         switch (eventName) {
         case 'IssuesEvent':
-            return (new IssuesPayload(body): Payload);
+            const payload = new IssuesPayload(body);
+            if (!this.serializers.issues) { throw new Error(`serializer was not found: ${this.packageName}.${eventName}`); }
+            return this.serializers.issues.serialize(payload);
         default:
-            return new Payload(body);
+            throw new Error(`unsupported event: ${eventName}`);
         }
     }
 }
