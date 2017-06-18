@@ -18,47 +18,6 @@ namespace Controller {
     }
 }
 
-namespace Serializer {
-    class SerializerMaster {
-        + SerializerMaster constructor ([String packageName])
-        + Promise<Message> serialize (String eventName, Object payload)
-        - SerializerAbstract findSerializer (String packageName, String eventName)
-    }
-
-    interface SerializerAbstract {
-        + Promise<Message> serialize (Object payload)
-        + String eventName
-    }
-    
-    SerializerMaster *-- SerializerAbstract
-    SerializerAbstract --> Model.Message
-    SerializerAbstract --> GitHub.GitHubAPI
-
-    namespace JpnSerializer {
-        class IssuesSerializer
-        class CommitCommentsSerializer
-        class GollumSerializer
-        
-        IssuesSerializer --|> Serializer.SerializerAbstract
-        CommitCommentsSerializer --|> Serializer.SerializerAbstract
-        GollumSerializer --|> Serializer.SerializerAbstract
-    }
-}
-
-namespace Sender {
-    class SlackSender {
-        - String _team
-        - String _channel
-        - String _token
-        - String _botName
-        - String _botIcon
-        + SlackSender constructor ([Object defaultParams])
-        + Promise<void> send (Message msg, Object params = {})
-    }
-
-    SlackSender --> Model.Message
-}
-
 namespace Model {
     class Message {
         - String _text
@@ -71,6 +30,65 @@ namespace Model {
     enum MessageType
 
     Message --> MessageType
+
+    namespace GitHub {
+        class Payload {
+            + Object repository
+            + Object sender
+            + Payload constructor (Object params)
+        }
+
+        class IssuesPayload {
+            + Object action
+            + Object issue
+            + IssuesPayload constructor (Object params)
+        }
+
+        IssuesPayload --|> Payload
+    }
+}
+
+namespace Serializer {
+    class SerializerMaster {
+        + String packageName
+        + Serializers serializers
+        + SerializerMaster constructor (String? packageName)
+        + Promise<Message> serialize (String eventName, Object body)
+        - Promise<Message> serializeIssuesEvent (IssuesPayload payload)
+    }
+
+    interface ISerializer<Payload T> {
+        + Promise<Message> serialize (T payload)
+    }
+    
+    SerializerMaster *-- ISerializer
+    ISerializer --> Model.Message
+    ISerializer --> GitHub.GitHubAPI
+    ISerializer *-- Model.GitHub.Payload
+
+    namespace JpnSerializer {
+        class IssuesSerializer<IssuesPayload>
+        class CommitCommentsSerializer<CommitCommentPayload>
+        class GollumSerializer<GollumPayload>
+
+        IssuesSerializer --|> Serializer.ISerializer
+        CommitCommentsSerializer --|> Serializer.ISerializer
+        GollumSerializer --|> Serializer.ISerializer
+    }
+}
+
+namespace Sender {
+    class SlackSender {
+        - String _team
+        - String _channel
+        - String _token
+        - String _botName
+        - String _botIcon
+        + SlackSender constructor (Object? defaultParams)
+        + Promise<void> send (Message msg, Object params = {})
+    }
+
+    SlackSender --> Model.Message
 }
 
 namespace GitHub {
@@ -80,5 +98,4 @@ namespace GitHub {
         + GitHubAPI constructor ([String token])
     }
 }
-
 @enduml

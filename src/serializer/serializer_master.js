@@ -27,11 +27,16 @@ export default class SerializerMaster {
 
         switch (eventName) {
         case 'IssuesEvent':
-            const payload = new IssuesPayload(body);
-            if (!this.serializers.issues) { throw new Error(`serializer was not found: ${this.packageName}.${eventName}`); }
-            return this.serializers.issues.serialize(payload);
+            return this.serializeIssuesEvent(new IssuesPayload(body));
         default:
             throw new Error(`unsupported event: ${eventName}`);
         }
+    }
+
+    async serializeIssuesEvent (payload: IssuesPayload) {
+        if (!this.serializers.issues) {
+            throw new Error(`serializer was not found: ${this.packageName}.IssuesEvent`);
+        }
+        return this.serializers.issues.serialize(payload);
     }
 }
