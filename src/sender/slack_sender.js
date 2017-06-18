@@ -18,7 +18,8 @@ export default class SlackSender {
             method: 'POST',
             uri: this._uri,
             form: {
-                payload: JSON.stringify(this._createPayload(msg))
+                payload: JSON.stringify(this._createPayload(msg)),
+                mrkdwn: true
             }
         });
     }
@@ -32,7 +33,8 @@ export default class SlackSender {
                 author_name: msg.username,
                 author_icon: msg.userIcon,
                 author_link: msg.userLink,
-                text: msg.body
+                text: msg.body,
+                mrkdwn_in: ['pretext', 'text']
             }]
         };
     }

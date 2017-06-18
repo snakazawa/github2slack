@@ -4,6 +4,7 @@ export type Payload$User = {login: string, url: string, avatar_url: string};
 export type Payload$Sender = Payload$User;
 export type Payload$Repository = {name: string, full_name: string, url: string, owner: Payload$User};
 export type Payload$Label = {url: string, name: string, color: string}
+export type Payload$Milestone = {url: string, number: number, title: string, state: string, description: string, due_on: string};
 export type Payload$Issue = {
     url: string,
     number: number,
@@ -12,7 +13,8 @@ export type Payload$Issue = {
     user: Payload$User,
     labels: Array<Payload$Label>,
     state: 'open' | 'closed',
-    assignees: Array<Payload$Issue>
+    assignees: Array<Payload$User>,
+    milestone?: Payload$Milestone
 };
 
 export class Payload {
