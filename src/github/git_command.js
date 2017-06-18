@@ -17,7 +17,7 @@ export default class GitCommand {
     }
 
     exists (): boolean {
-        return fs.existsSync(this.repoPath);
+        return fs.existsSync(this.fullRepoPath);
     }
 
     async clone (): Promise<string> {

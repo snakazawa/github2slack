@@ -22,6 +22,13 @@ export default class GitHubWiki {
     }
 
     async diffWithPrevent (sha: string, filename: string) {
-        return this.git.diff(`${sha}~`, sha, filename);
+        const res = await this.git.diff(`${sha}~`, sha, filename);
+
+        // 先頭の自明な文字列を取り除く
+        const lines = res.split('\n');
+        const pos = lines.findIndex(x => x.startsWith('@@'));
+        const text = lines.slice(pos).join('\n');
+
+        return text;
     }
 }

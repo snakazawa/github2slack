@@ -24,7 +24,7 @@ export type Payload$Comment = {
 export type Payload$Page = {
     page_name: string,
     title: string,
-    action: string,
+    action: 'created' | 'edited',
     sha: string,
     html_url: string
 };
