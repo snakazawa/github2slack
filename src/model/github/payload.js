@@ -1,6 +1,6 @@
 // @flow
 
-export type Payload$User = {login: string, url: string};
+export type Payload$User = {login: string, url: string, avatar_url: string};
 export type Payload$Sender = Payload$User;
 export type Payload$Repository = {name: string, full_name: string, url: string, owner: Payload$User};
 export type Payload$Label = {url: string, name: string, color: string}

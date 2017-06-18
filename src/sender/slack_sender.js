@@ -1,22 +1,54 @@
 // @flow
 import type Message from '../model/message';
+import rp from 'request-promise';
+import config from 'config';
+
+import type { MessageType } from '../model/message_types';
+import { messageTypes } from '../model/message_types';
 
 export default class SlackSender {
-    _team: string;
-    _channel: string;
-    _token: string;
-    _botName: string;
-    _botIcon: string;
+    _uri: string;
 
-    constructor (defaultParams: ?mixed) {
-        if (defaultParams) {
-
-        } else {
-
-        }
+    constructor (uri: ?string) {
+        this._uri = uri || config.get('slackbot.uri');
     }
 
-    send (msg: Message, params: ?mixed): Promise<void> {
-        return Promise.resolve();
+    async send (msg: Message): Promise<any> {
+        return rp({
+            method: 'POST',
+            uri: this._uri,
+            form: {
+                payload: JSON.stringify(this._createPayload(msg))
+            }
+        });
+    }
+
+    _createPayload (msg: Message) {
+        return {
+            attachments: [{
+                fallback: msg.fallback,
+                color: this.typeToColor(msg.type),
+                pretext: msg.title,
+                author_name: msg.username,
+                author_icon: msg.userIcon,
+                author_link: msg.userLink,
+                text: msg.body
+            }]
+        };
+    }
+
+    typeToColor (messageType: MessageType) {
+        switch (messageType) {
+        case messageTypes.Default:
+            return null;
+        case messageTypes.Good:
+            return 'good';
+        case messageTypes.Warning:
+            return 'warning';
+        case messageTypes.Danger:
+            return 'danger';
+        default:
+            return null;
+        }
     }
 }

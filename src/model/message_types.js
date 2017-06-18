@@ -2,7 +2,9 @@
 
 export const messageTypes = {
     Default: 'Default',
-    Error: 'Error'
+    Good: 'Good',
+    Warning: 'Warning',
+    Danger: 'Danger'
 };
 
 export type MessageType = $Keys<typeof messageTypes>
