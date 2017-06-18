@@ -1,9 +1,8 @@
 // @flow
 
 import path from 'path';
-import child_process from 'child_process';
+import { exec } from 'child_process';
 import fs from 'fs';
-const exec = child_process.exec;
 
 export default class GitCommand {
     ROOT_DIR: string;
@@ -35,7 +34,7 @@ export default class GitCommand {
     get repoPath (): string {
         return `${this.owner}__${this.reponame}`;
     }
-    
+
     get fullRepoPath (): string {
         return path.join(this.ROOT_DIR, this.repoPath);
     }
@@ -44,7 +43,7 @@ export default class GitCommand {
         return `git@github.com:${this.owner}/${this.reponame}.git`;
     }
 
-    async _exec (command: string, cwd: ?string = null): Promise<string> {
+    async _exec (command: string, cwd: string = this.ROOT_DIR): Promise<string> {
         return new Promise(resolve => {
             exec(command, {cwd}, (err, stdout, stderr) => {
                 if (err) {

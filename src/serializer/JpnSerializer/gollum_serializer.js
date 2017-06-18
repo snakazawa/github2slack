@@ -34,14 +34,14 @@ export default class GollumSerializer implements ISerializer<GollumPayload> {
 
     _createComment (action: string): string {
         switch (action) {
-            case 'created':
-                return '新しいWikiページ';
+        case 'created':
+            return '新しいWikiページ';
 
-            case 'edited':
-                return 'Wikiのページを更新しました';
+        case 'edited':
+            return 'Wikiのページを更新しました';
 
-            default:
-                throw new Error(`unsupported action: ${action}`);
+        default:
+            throw new Error(`unsupported action: ${action}`);
         }
     }
 
