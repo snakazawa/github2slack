@@ -40,8 +40,6 @@
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
     "flow-bin": "^0.48.0",
-    "iflow-koa": "^1.1.21",
-    "iflow-koa-router": "^1.1.21",
     "koa": "^2.2.0",
     "koa-bodyparser": "^4.2.0",
     "koa-flow-declarations": "^0.1.0",

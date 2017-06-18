@@ -1,16 +1,17 @@
 // @flow
+import type { Context } from 'koa';
 
 export default class IndexController {
-    static async getIndex (ctx: Koa$Context) {
+    static async getIndex (ctx: Context) {
         ctx.body = 'Hello Koa 2!';
     }
 
-    static async notFound (ctx: Koa$Context) {
+    static async notFound (ctx: Context) {
         ctx.body = {message: 'Not Found'};
         ctx.status = 404;
     }
 
-    static async internalServerError (ctx: Koa$Context, next: Function) {
+    static async internalServerError (ctx: Context, next: Function) {
         try {
             await next();
         } catch (err) {
