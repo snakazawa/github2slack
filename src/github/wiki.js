@@ -28,7 +28,7 @@ export default class GitHubWiki {
         // 先頭の自明な文字列を取り除く
         const lines = res.diff.split('\n');
         const pos = lines.findIndex(x => x.startsWith('@@'));
-        const diff = lines.slice(pos + 1).join('\n');
+        const diff = lines.slice(pos).join('\n');
 
         return [res.subject, res.body, '\n', '```', diff, '```'].join('\n');
     }

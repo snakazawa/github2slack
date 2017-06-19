@@ -55,7 +55,7 @@ export default class GitCommand {
             .map(x => {
                 if (x.startsWith('@@ ')) {
                     const pos = x.indexOf('@@', 3);
-                    const a = x.substr(0, pos);
+                    const a = x.substr(0, pos + 2);
                     const b = x.substr(pos + 2);
                     const b2 = b.substr(0, 1) + diffIndent + b.substr(1);
                     return a + '\n' + b2;
