@@ -47,12 +47,11 @@ export default class GollumSerializer implements ISerializer<GollumPayload> {
 
     async _diffPage (repository: Payload$Repository, page: Payload$Page): Promise<string> {
         const {name: reponame, owner: {login: ownerName}} = repository;
-        const {sha, title} = page;
-        const md = `${title}.md`;
+        const {sha} = page;
 
         const git = new GitHubWiki(ownerName, reponame);
         await git.cloneOrUpdateRepo();
 
-        return git.diffWithPrevent(sha, md);
+        return git.show(sha);
     }
 }

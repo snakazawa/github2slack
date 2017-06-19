@@ -1,6 +1,7 @@
 // @flow
 
 import GitCommand from './git_command';
+import type { ShowResponse } from './git_command';
 
 export default class GitHubWiki {
     owner: string;
@@ -13,7 +14,7 @@ export default class GitHubWiki {
         this.git = new GitCommand(this.owner, this.reponame);
     }
 
-    async cloneOrUpdateRepo () {
+    async cloneOrUpdateRepo (): Promise<string> {
         if (this.git.exists()) {
             return this.git.pull();
         } else {
@@ -21,14 +22,14 @@ export default class GitHubWiki {
         }
     }
 
-    async diffWithPrevent (sha: string, filename: string) {
-        const res = await this.git.diff(`${sha}~`, sha, filename);
+    async show (sha: string): Promise<string> {
+        const res: ShowResponse = await this.git.show(sha);
 
         // 先頭の自明な文字列を取り除く
-        const lines = res.split('\n');
+        const lines = res.diff.split('\n');
         const pos = lines.findIndex(x => x.startsWith('@@'));
-        const text = lines.slice(pos).join('\n');
+        const diff = lines.slice(pos + 1).join('\n');
 
-        return text;
+        return [res.subject, res.body, '\n', '```', diff, '```'].join('\n');
     }
 }

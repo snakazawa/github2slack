@@ -13,6 +13,5 @@ export default class Router extends KoaRouter {
         this.post('/github/hook', GitHubHookController.postIndex);
 
         this.all('*', IndexController.notFound);
-
     }
 }
