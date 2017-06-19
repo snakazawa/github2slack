@@ -5,10 +5,10 @@ import type { Context } from 'koa';
 
 export default class GitHubHookController {
     static async postIndex (ctx: Context) {
-        const eventName = ctx.headers['X-GitHub-Event'];
+        const eventName = ctx.headers['x-github-event'];
 
         const serializer = new SerializerMaster();
-        const msg = await serializer.serialize(eventName, ctx.body);
+        const msg = await serializer.serialize(eventName, ctx.request.body);
 
         const sender = new SlackSender();
         await sender.send(msg);

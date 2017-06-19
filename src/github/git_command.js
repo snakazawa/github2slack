@@ -12,7 +12,7 @@ export default class GitCommand {
     constructor (owner: string, reponame: string) {
         this.owner = owner;
         this.reponame = reponame;
-        this.ROOT_DIR = path.join(__dirname, '..', '..', 'user_git_repositories');
+        this.ROOT_DIR = path.resolve(path.join(__dirname, '..', '..', 'user_git_repositories'));
     }
 
     exists (): boolean {

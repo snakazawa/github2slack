@@ -8,9 +8,11 @@ export default class Router extends KoaRouter {
         super();
 
         this.use(IndexController.internalServerError);
+
         this.get('/', IndexController.getIndex);
+        this.post('/github/hook', GitHubHookController.postIndex);
+
         this.all('*', IndexController.notFound);
 
-        this.post('/github/hook', GitHubHookController.postIndex);
     }
 }

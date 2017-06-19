@@ -20,3 +20,4 @@ coverage/
 /dist
 
 /user_git_repositories
+!/user_git_repositories/.gitkeep
