@@ -1,7 +1,6 @@
 // @flow
 import type Message from '../model/message';
 import rp from 'request-promise';
-import config from 'config';
 
 import type { MessageType } from '../model/message_types';
 import { messageTypes } from '../model/message_types';
@@ -10,7 +9,7 @@ export default class SlackSender {
     _uri: string;
 
     constructor (uri: ?string) {
-        this._uri = uri || config.get('slackbot.uri');
+        this._uri = uri || process.env.SLACKBOT_URI;
     }
 
     async send (msg: Message): Promise<any> {

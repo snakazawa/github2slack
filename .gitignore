@@ -14,8 +14,8 @@ coverage/
 /config/*
 !/config/default.json
 
-/user_git_repositories
-!/user_git_repositories/.gitkeep
+.env*
+!.env.default
 
 /dist
 
