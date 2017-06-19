@@ -44,4 +44,8 @@ Support events:
 
 ## Development
 
+### Class Diagram
+
+![Class Diagram](documents/class.png "Class Diagram")
+
 **TODO**
