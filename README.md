@@ -1,6 +1,7 @@
 # github2slack
 
 [![Build Status](https://travis-ci.org/snakazawa/github2slack.svg?branch=master)](https://travis-ci.org/snakazawa/github2slack)
+[![Code Climate](https://codeclimate.com/github/snakazawa/github2slack/badges/gpa.svg)](https://codeclimate.com/github/snakazawa/github2slack)
 
 Simply and customizable GitHub-Slack notifier. 
 
