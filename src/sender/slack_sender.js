@@ -37,7 +37,7 @@ export default class SlackSender {
                 author_icon: msg.userIcon,
                 author_link: msg.userLink,
                 text: msg.body,
-                mrkdwn_in: ['pretext', 'text']
+                mrkdwn_in: ['pretext', 'text', 'title', 'fields', 'fallback']
             }]
         };
     }
