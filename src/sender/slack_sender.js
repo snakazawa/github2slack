@@ -9,7 +9,11 @@ export default class SlackSender {
     _uri: string;
 
     constructor (uri: ?string) {
-        this._uri = uri || process.env.SLACKBOT_URI;
+        const _uri: ?string = uri || process.env.SLACKBOT_URI;
+        if (!_uri) {
+            throw new Error('require Slack Sender URI');
+        }
+        this._uri = _uri;
     }
 
     async send (msg: Message): Promise<any> {
