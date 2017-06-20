@@ -113,6 +113,6 @@ export default class IssuesSerializer implements ISerializer<IssuesPayload> {
     }
 
     _milestoneToString (milestone: ?Payload$Milestone): string {
-        return milestone ? `*〆 ${milestone.title}*` : '(期限なし)';
+        return milestone ? `*<${milestone.html_url}|〆 ${milestone.title}>*` : '(期限なし)';
     }
 }
