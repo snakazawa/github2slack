@@ -1,6 +1,6 @@
 // @flow
 
-import difflib from 'difflib';
+import Util from '../../util/util';
 import type { ISerializer } from '../i_serializer';
 import type { IssuesPayload } from '../../model/github/issues_payload';
 import Message from '../../model/message';
@@ -15,8 +15,6 @@ type PreParams = {
     labels: boolean,
     diff: boolean
 };
-
-const diffIndent = '  ';
 
 export default class IssuesSerializer implements ISerializer<IssuesPayload> {
     async serialize (payload: IssuesPayload): Promise<Message> {
@@ -99,7 +97,7 @@ export default class IssuesSerializer implements ISerializer<IssuesPayload> {
         if (params.body) {
             if (params.diff && payload.changes) {
                 if (payload.changes.body) {
-                    res += '```' + this._diff(body, payload.changes.body.from) + '```';
+                    res += '```' + Util.diff(body, payload.changes.body.from) + '```';
                 } else if (payload.changes.title) {
                     const from = payload.changes.title.from;
                     res += `${from} -> ${title}`;
@@ -128,21 +126,5 @@ export default class IssuesSerializer implements ISerializer<IssuesPayload> {
 
     _milestoneToString (milestone: ?Payload$Milestone): string {
         return milestone ? `*<${milestone.html_url}|〆 ${milestone.title}>*` : '(期限なし)';
-    }
-
-    _diff (to: string, from: string) {
-        to.replace(/\r\n/g, '\n');
-        from.replace(/\r\n/g, '\n');
-        return difflib
-            .unifiedDiff(to.split('\n'), from.split('\n'))
-            .slice(2) // remove filenames
-            .map(x => {
-                if (x.startsWith('@@')) {
-                    return x;
-                } else {
-                    return x.substr(0, 1) + diffIndent + x.substr(1);
-                }
-            })
-            .join('');
     }
 }

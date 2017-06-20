@@ -1,4 +1,6 @@
 // @flow
+
+import Util from '../../util/util';
 import type { ISerializer } from '../i_serializer';
 import type { IssueCommentPayload } from '../../model/github/issue_comment_payload';
 import Message from '../../model/message';
@@ -10,9 +12,10 @@ export default class IssuesCommentSerializer implements ISerializer<IssueComment
         const {login: sender, html_url: senderUrl, avatar_url: senderAvatar} = payload.sender;
         const {name: reponame, html_url: repoUrl} = payload.repository;
         const {number, title} = payload.issue;
-        const {html_url: url, body} = payload.comment;
+        const {html_url: url} = payload.comment;
 
         const comment = this._createComment(action);
+        const body = this._createBody(payload);
 
         return new Message({
             title: `[<${repoUrl}|${reponame}>] ${comment}: <${url}|#${number} ${title}>`,
@@ -37,6 +40,14 @@ export default class IssuesCommentSerializer implements ISerializer<IssueComment
 
         default:
             throw new Error(`unsupported action: ${action}`);
+        }
+    }
+
+    _createBody (payload: IssueCommentPayload): string {
+        if (payload.action === 'edited' && payload.changes) {
+            return '```' + Util.diff(payload.issue.body, payload.changes.body.from) + '```';
+        } else {
+            return payload.issue.body;
         }
     }
 }
