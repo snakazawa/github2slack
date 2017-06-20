@@ -7,7 +7,7 @@ export class IssuesPayload extends Payload {
     action: 'assigned' | 'unassigned' | 'labeled' | 'unlabeled' | 'opened' |
         'edited' | 'milestoned' | 'demilestoned' | 'closed' | 'reopened';
     issue: Payload$Issue;
-    changes: ?{body: {from: string}};
+    changes: ?{body?: {from: string}, title?: {from: string}};
 
     constructor (params: any = {}) {
         super(params);

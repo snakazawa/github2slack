@@ -76,7 +76,7 @@ export default class IssuesSerializer implements ISerializer<IssuesPayload> {
     }
 
     _createBody (payload: IssuesPayload, params: PreParams): string {
-        const {body, assignees, labels, milestone} = payload.issue;
+        const {title, body, assignees, labels, milestone} = payload.issue;
 
         let res = '';
 
@@ -98,7 +98,12 @@ export default class IssuesSerializer implements ISerializer<IssuesPayload> {
 
         if (params.body) {
             if (params.diff && payload.changes) {
-                res += '```' + this._diff(body, payload.changes.body.from) + '```';
+                if (payload.changes.body) {
+                    res += '```' + this._diff(body, payload.changes.body.from) + '```';
+                } else if (payload.changes.title) {
+                    const from = payload.changes.title.from;
+                    res += `${from} -> ${title}`;
+                }
             } else {
                 res += body;
             }
