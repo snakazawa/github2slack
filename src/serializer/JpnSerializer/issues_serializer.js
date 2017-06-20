@@ -39,13 +39,13 @@ export default class IssuesSerializer implements ISerializer<IssuesPayload> {
             return {comment: '新しいIssue', body: true, milestone: true, assignees: true, labels: true};
 
         case 'closed':
-            return {comment: 'Issueが閉じられました', body: true, milestone: true, assignees: true, labels: true};
+            return {comment: 'Issueが閉じられました', body: false, milestone: false, assignees: false, labels: false};
 
         case 'reopened':
-            return {comment: 'Issueが再開されました', body: true, milestone: true, assignees: true, labels: true};
+            return {comment: 'Issueが再開されました', body: false, milestone: false, assignees: false, labels: false};
 
         case 'edited':
-            return {comment: 'Issueが編集されました', body: true, milestone: true, assignees: true, labels: true};
+            return {comment: 'Issueが編集されました', body: true, milestone: false, assignees: false, labels: false};
 
         case 'assigned':
             return {comment: '担当者が編集されました', body: false, milestone: false, assignees: true, labels: false};
@@ -75,11 +75,11 @@ export default class IssuesSerializer implements ISerializer<IssuesPayload> {
 
         let res = '';
 
-        if (params.milestone && milestone) {
+        if (params.milestone) {
             res += this._milestoneToString(milestone);
         }
 
-        if (params.labels && labels.length) {
+        if (params.labels) {
             if (res.length) { res += ' '; }
             res += this._labelsToString(labels);
         }
@@ -107,12 +107,12 @@ export default class IssuesSerializer implements ISerializer<IssuesPayload> {
     }
 
     _labelsToString (labels: Array<Payload$Label>): string {
-        return labels
+        return labels.length ? labels
             .map((label: Payload$Label) => `\`${label.name}\``)
-            .join(' ');
+            .join(' ') : '(ラベルなし)';
     }
 
-    _milestoneToString (milestone: Payload$Milestone): string {
-        return `*〆 ${milestone.title}*`;
+    _milestoneToString (milestone: ?Payload$Milestone): string {
+        return milestone ? `*〆 ${milestone.title}*` : '(期限なし)';
     }
 }
