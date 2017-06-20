@@ -45,7 +45,7 @@ export default class IssuesCommentSerializer implements ISerializer<IssueComment
 
     _createBody (payload: IssueCommentPayload): string {
         if (payload.action === 'edited' && payload.changes) {
-            return '```' + Util.diff(payload.issue.body, payload.changes.body.from) + '```';
+            return '```' + Util.diff(payload.changes.body.from, payload.issue.body) + '```';
         } else {
             return payload.issue.body;
         }

@@ -97,7 +97,7 @@ export default class IssuesSerializer implements ISerializer<IssuesPayload> {
         if (params.body) {
             if (params.diff && payload.changes) {
                 if (payload.changes.body) {
-                    res += '```' + Util.diff(body, payload.changes.body.from) + '```';
+                    res += '```' + Util.diff(payload.changes.body.from, body) + '```';
                 } else if (payload.changes.title) {
                     const from = payload.changes.title.from;
                     res += `${from} -> ${title}`;
