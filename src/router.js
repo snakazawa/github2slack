@@ -7,11 +7,14 @@ export default class Router extends KoaRouter {
     constructor () {
         super();
 
-        this.use(IndexController.internalServerError);
+        const index = new IndexController();
+        const githubHook = new GitHubHookController();
 
-        this.get('/', IndexController.getIndex);
-        this.post('/github/hook', GitHubHookController.postIndex);
+        this.use(index.internalServerError.bind(index));
 
-        this.all('*', IndexController.notFound);
+        this.get('/', index.getIndex.bind(index));
+        this.post('/github/hook', githubHook.postIndex.bind(githubHook));
+
+        this.all('*', index.notFound.bind(index));
     }
 }

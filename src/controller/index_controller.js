@@ -2,16 +2,16 @@
 import type { Context } from 'koa';
 
 export default class IndexController {
-    static async getIndex (ctx: Context) {
+    async getIndex (ctx: Context) {
         ctx.body = 'Hello Koa 2!';
     }
 
-    static async notFound (ctx: Context) {
+    async notFound (ctx: Context) {
         ctx.body = {message: 'Not Found'};
         ctx.status = 404;
     }
 
-    static async internalServerError (ctx: Context, next: Function) {
+    async internalServerError (ctx: Context, next: Function) {
         try {
             await next();
         } catch (err) {

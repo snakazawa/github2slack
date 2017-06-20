@@ -1,18 +1,22 @@
 // @flow
+
 import SerializerMaster from '../serializer/serializer_master';
 import SlackSender from '../sender/slack_sender';
 import type { Context } from 'koa';
-
 import GitHubToSlackQueue from '../util/github_to_slack_queue';
 
-class GitHubHookController {
-    static queue: GitHubToSlackQueue;
+export default class GitHubHookController {
+    queue: GitHubToSlackQueue;
 
-    static async postIndex (ctx: Context): Promise<void> {
-        GitHubHookController.queue.push(ctx);
+    constructor () {
+        this.queue = new GitHubToSlackQueue(this._githubToSlack.bind(this));
     }
 
-    static _githubToSlack (ctx: Context): void {
+    async postIndex (ctx: Context): Promise<void> {
+        this.queue.push(ctx);
+    }
+
+    _githubToSlack (ctx: Context): void {
         (async () => {
             const eventName = ctx.headers['x-github-event'];
 
@@ -24,7 +28,3 @@ class GitHubHookController {
         })().catch(err => console.error(err)); // TODO: improve error handling
     }
 }
-
-GitHubHookController.queue = new GitHubToSlackQueue(GitHubHookController._githubToSlack);
-
-export default GitHubHookController;
