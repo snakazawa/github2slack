@@ -12,8 +12,8 @@ export default class GollumSerializer implements ISerializer<GollumPayload> {
             throw new Error('wiki event pages length should be 1');
         }
 
-        const {login: sender, url: senderUrl, avatar_url: senderAvatar} = payload.sender;
-        const {name: reponame, url: repoUrl} = payload.repository;
+        const {login: sender, html_url: senderUrl, avatar_url: senderAvatar} = payload.sender;
+        const {name: reponame, html_url: repoUrl} = payload.repository;
 
         const page: Payload$Page = payload.pages[0];
         const {action, title, sha, html_url: url} = page;

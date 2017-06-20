@@ -7,10 +7,10 @@ import { messageTypes } from '../../model/message_types';
 export default class IssuesCommentSerializer implements ISerializer<IssueCommentPayload> {
     async serialize (payload: IssueCommentPayload): Promise<Message> {
         const action = payload.action;
-        const {login: sender, url: senderUrl, avatar_url: senderAvatar} = payload.sender;
-        const {name: reponame, url: repoUrl} = payload.repository;
+        const {login: sender, html_url: senderUrl, avatar_url: senderAvatar} = payload.sender;
+        const {name: reponame, html_url: repoUrl} = payload.repository;
         const {number, title} = payload.issue;
-        const {url, body} = payload.comment;
+        const {html_url: url, body} = payload.comment;
 
         const comment = this._createComment(action);
 

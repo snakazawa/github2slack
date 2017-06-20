@@ -16,9 +16,9 @@ type PreParams = {
 export default class IssuesSerializer implements ISerializer<IssuesPayload> {
     async serialize (payload: IssuesPayload): Promise<Message> {
         const action = payload.action;
-        const {login: sender, url: senderUrl, avatar_url: senderAvatar} = payload.sender;
-        const {name: reponame, url: repoUrl} = payload.repository;
-        const {url, number, title} = payload.issue;
+        const {login: sender, html_url: senderUrl, avatar_url: senderAvatar} = payload.sender;
+        const {name: reponame, html_url: repoUrl} = payload.repository;
+        const {html_url: url, number, title} = payload.issue;
 
         const params: PreParams = this._preserialize(action);
         const body = this._createBody(payload, params);
