@@ -1,4 +1,6 @@
 // @flow
+
+import difflib from 'difflib';
 import type { ISerializer } from '../i_serializer';
 import type { IssuesPayload } from '../../model/github/issues_payload';
 import Message from '../../model/message';
@@ -10,8 +12,11 @@ type PreParams = {
     body: boolean,
     milestone: boolean,
     assignees: boolean,
-    labels: boolean
+    labels: boolean,
+    diff: boolean
 };
+
+const diffIndent = '  ';
 
 export default class IssuesSerializer implements ISerializer<IssuesPayload> {
     async serialize (payload: IssuesPayload): Promise<Message> {
@@ -36,34 +41,34 @@ export default class IssuesSerializer implements ISerializer<IssuesPayload> {
     _preserialize (action: string): PreParams {
         switch (action) {
         case 'opened':
-            return {comment: '新しいIssue', body: true, milestone: true, assignees: true, labels: true};
+            return {comment: '新しいIssue', body: true, milestone: true, assignees: true, labels: true, diff: false};
 
         case 'closed':
-            return {comment: 'Issueが閉じられました', body: false, milestone: false, assignees: false, labels: false};
+            return {comment: 'Issueが閉じられました', body: false, milestone: false, assignees: false, labels: false, diff: false};
 
         case 'reopened':
-            return {comment: 'Issueが再開されました', body: false, milestone: false, assignees: false, labels: false};
+            return {comment: 'Issueが再開されました', body: false, milestone: false, assignees: false, labels: false, diff: false};
 
         case 'edited':
-            return {comment: 'Issueが編集されました', body: true, milestone: false, assignees: false, labels: false};
+            return {comment: 'Issueが編集されました', body: true, milestone: false, assignees: false, labels: false, diff: true};
 
         case 'assigned':
-            return {comment: '担当者が編集されました', body: false, milestone: false, assignees: true, labels: false};
+            return {comment: '担当者が編集されました', body: false, milestone: false, assignees: true, labels: false, diff: false};
 
         case 'unassigned':
-            return {comment: '担当者が編集されました', body: false, milestone: false, assignees: true, labels: false};
+            return {comment: '担当者が編集されました', body: false, milestone: false, assignees: true, labels: false, diff: false};
 
         case 'labeled':
-            return {comment: 'ラベルが編集されました', body: false, milestone: false, assignees: false, labels: true};
+            return {comment: 'ラベルが編集されました', body: false, milestone: false, assignees: false, labels: true, diff: false};
 
         case 'unlabeled':
-            return {comment: 'ラベルが編集されました', body: false, milestone: false, assignees: false, labels: true};
+            return {comment: 'ラベルが編集されました', body: false, milestone: false, assignees: false, labels: true, diff: false};
 
         case 'milestoned':
-            return {comment: '期限が変更されました', body: false, milestone: true, assignees: false, labels: false};
+            return {comment: '期限が変更されました', body: false, milestone: true, assignees: false, labels: false, diff: false};
 
         case 'demilestoned':
-            return {comment: '期限が変更されました', body: false, milestone: true, assignees: false, labels: false};
+            return {comment: '期限が変更されました', body: false, milestone: true, assignees: false, labels: false, diff: false};
 
         default:
             throw new Error(`unsupported action: ${action}`);
@@ -92,7 +97,11 @@ export default class IssuesSerializer implements ISerializer<IssuesPayload> {
         }
 
         if (params.body) {
-            res += body;
+            if (params.diff && payload.changes) {
+                res += '```' + this._diff(body, payload.changes.body.from) + '```';
+            } else {
+                res += body;
+            }
         }
 
         return res;
@@ -114,5 +123,21 @@ export default class IssuesSerializer implements ISerializer<IssuesPayload> {
 
     _milestoneToString (milestone: ?Payload$Milestone): string {
         return milestone ? `*<${milestone.html_url}|〆 ${milestone.title}>*` : '(期限なし)';
+    }
+
+    _diff (to: string, from: string) {
+        to.replace(/\r\n/g, '\n');
+        from.replace(/\r\n/g, '\n');
+        return difflib
+            .unifiedDiff(to.split('\n'), from.split('\n'))
+            .slice(2) // remove filenames
+            .map(x => {
+                if (x.startsWith('@@')) {
+                    return x;
+                } else {
+                    return x.substr(0, 1) + diffIndent + x.substr(1);
+                }
+            })
+            .join('');
     }
 }

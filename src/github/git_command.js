@@ -11,7 +11,7 @@ export type ShowResponse = {
 }
 
 const showDelimiter = '>>>>_____<<<<';
-const diffIndent = '    ';
+const diffIndent = '  ';
 
 export default class GitCommand {
     ROOT_DIR: string;
