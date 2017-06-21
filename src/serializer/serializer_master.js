@@ -22,6 +22,12 @@ export default class SerializerMaster {
         this.serializers = serializers;
     }
 
+    isSupportEvent (eventName: string): boolean {
+        const keys = Object.keys(this.serializers);
+        const camelEventName = eventName.replace(/(_)(\w)/g, (match, p1, p2) => p2.toUpperCase());
+        return keys.includes(camelEventName);
+    }
+
     async serialize (eventName: string, body: any): Promise<Message> {
         if (!body) {
             throw new Error('invalid body: (empty)');
