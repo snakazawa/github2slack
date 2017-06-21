@@ -1,10 +1,7 @@
 // @flow
-import dotenv from 'dotenv';
 import app from './app';
 import Debug from 'debug';
 import http from 'http';
-
-dotenv.config();
 
 const debug = Debug('server');
 

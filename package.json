@@ -4,7 +4,7 @@
   "private": true,
   "main": "dist/www.js",
   "scripts": {
-    "start": "node dist/www.js",
+    "start": "node -r dotenv/config -r source-map-support/register dist/www.js",
     "lint": "eslint",
     "lint:all": "eslint . --ext .js",
     "flow": "flow",
@@ -52,6 +52,7 @@
     "koa-router": "^7.2.0",
     "request": "^2.81.0",
     "request-promise": "^4.2.1",
+    "source-map-support": "^0.4.15",
     "webpack": "^2.6.1"
   }
 }
