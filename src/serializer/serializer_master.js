@@ -3,7 +3,7 @@ import { IssuesPayload } from '../model/github/issues_payload';
 import { IssueCommentPayload } from '../model/github/issue_comment_payload';
 import { GollumPayload } from '../model/github/gollum_payload';
 import type Message from '../model/message';
-import JpnSerializer from './JpnSerializer';
+import JpnSerializer from './jpn_serializer';
 import type { Serializers } from './serializers_type';
 
 const serializerPackages = {
