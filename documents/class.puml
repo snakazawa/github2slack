@@ -5,46 +5,68 @@ Router -> Controller.GitHubHookController
 Router -> Controller.IndexController
 
 namespace Controller {
+    class IndexController {
+        + Promise<void> notFound (Koa.Context ctx)
+        + Promise<void> internalServerError (Koa.Context ctx, Koa.Next next)
+    }
+
     class GitHubHookController {
-        + {static} void postIndex (Koa.Context ctx)
+        - queue: Util.GitHubToSlackQueue;
+        - serializer: Serializer.SerializerMaster
+        - sender: Sender.SlackSender
+
+        + constructor ();
+        + Promise<void> postIndex (Koa.Context ctx)
+        - Promise<void> _githubToSlack (Koa.Context ctx)
     }
 
     GitHubHookController --> Serializer.SerializerMaster
     GitHubHookController --> Sender.SlackSender
-
-    class IndexController {
-        + {static} void notFound (Koa.Context ctx)
-        + {static} void internalServerError (Koa.Context ctx, Koa.Next next)
-    }
+    GitHubHookController --> Util.GitHubToSlackQueue
 }
 
 namespace Model {
     class Message {
-        - String _text
-        - MessageType _type
-        + Message constructor (String text, MessageType type)
-        + get String text()
-        + get String type()
+        - <<readonly>> String? username
+        - <<readonly>> String? userIcon
+        - <<readonly>> String? userLink
+        - <<readonly>> String? title
+        - <<readonly>> String? body
+        - <<readonly>> String fallback
+        - <<readonly>> MessageType type
+
+        + constructor ({String username?, String userIcon?, String userLink?,
+                                String fallback?, String title?, String body?, MessageType type?})
     }
 
     enum MessageType
 
-    Message --> MessageType
+    Message --> Model.MessageType
 
     namespace GitHub {
         class Payload {
-            + Object repository
-            + Object sender
-            + Payload constructor (Object params)
+            + Payload$Repository repository
+            + Payload$Sender sender
+
+            + constructor (Object params)
         }
 
         class IssuesPayload {
-            + Object action
-            + Object issue
-            + IssuesPayload constructor (Object params)
+            + String action
+            + Payload$Issue issue
+            + Payload$Issues$Changes changes
+
+            + constructor (Object params)
         }
 
-        IssuesPayload --|> Payload
+        class GollumPayload {
+            + Payload$Page[] pages
+
+            + constructor (Object params)
+        }
+
+        IssuesPayload --|> Model.GitHub.Payload
+        GollumPayload --|> Model.GitHub.Payload
     }
 }
 
@@ -52,50 +74,132 @@ namespace Serializer {
     class SerializerMaster {
         + String packageName
         + Serializers serializers
-        + SerializerMaster constructor (String? packageName)
+
+        + constructor (String? packageName)
+        + Boolean isSupportEvent (String eventName)
         + Promise<Message> serialize (String eventName, Object body)
-        - Promise<Message> serializeIssuesEvent (IssuesPayload payload)
     }
+
+    SerializerMaster --> Model.GitHub.Payload
+    SerializerMaster *-- ISerializer
 
     interface ISerializer<Payload T> {
         + Promise<Message> serialize (T payload)
     }
-    
-    SerializerMaster *-- ISerializer
+
     ISerializer --> Model.Message
-    ISerializer --> GitHub.GitHubAPI
-    ISerializer *-- Model.GitHub.Payload
+    ISerializer --> Model.GitHub.Payload
+
+    namespace DefaultSerializer {
+        interface IDefaultSerializer<Payload T> {
+            - Promise<String> createTitle (T payload)
+            - Promise<String> createBody (T payload)
+            - Promise<MessageType> createType (T payload)
+        }
+
+        IDefaultSerializer --|> Serializer.ISerializer
+
+        class IssuesSerializer<IssuesPayload> {
+            - <<const>> String NO_ASSIGNEE_MESSAGE
+            - <<const>> String ASSIGNEE_LABEL
+            - <<const>> String NO_LABEL_MESSAGE
+            - <<const>> String NO_MILESTONE_MESSAGE
+            - String createComment (String action)
+            - PreBodyParams preBodySerialize (String action)
+        }
+
+        IssuesSerializer --|> Serializer.DefaultSerializer.IDefaultSerializer
+
+        class GollumSerializer<GollumPayload> {
+            - String createComment (String action)
+        }
+
+        GollumSerializer --|> Serializer.DefaultSerializer.IDefaultSerializer
+        GollumSerializer --> GitHub.Wiki
+    }
 
     namespace JpnSerializer {
-        class IssuesSerializer<IssuesPayload>
-        class CommitCommentsSerializer<CommitCommentPayload>
-        class GollumSerializer<GollumPayload>
+        class IssuesSerializer {
+            - <<const>> String NO_ASSIGNEE_MESSAGE
+            - <<const>> String ASSIGNEE_LABEL
+            - <<const>> String NO_LABEL_MESSAGE
+            - <<const>> String NO_MILESTONE_MESSAGE
 
-        IssuesSerializer --|> Serializer.ISerializer
-        CommitCommentsSerializer --|> Serializer.ISerializer
-        GollumSerializer --|> Serializer.ISerializer
+            - String createComment (String action)
+        }
+
+        class GollumSerializer {
+            - String createComment (String action)
+        }
+
+        IssuesSerializer --|> Serializer.DefaultSerializer.IssuesSerializer
+        GollumSerializer --|> Serializer.DefaultSerializer.GollumSerializer
     }
 }
 
 namespace Sender {
     class SlackSender {
-        - String _team
-        - String _channel
-        - String _token
-        - String _botName
-        - String _botIcon
-        + SlackSender constructor (Object? defaultParams)
-        + Promise<void> send (Message msg, Object params = {})
+        - String uri
+
+        + constructor (String? uri)
+        + Promise<void> send (Message msg)
+        - Object createPayload (Message msg)
+        - String? typeToColor (MessageType messageType)
     }
 
     SlackSender --> Model.Message
 }
 
 namespace GitHub {
-    class GitHubAPI {
-        - String _token
-        - GitHub _api
-        + GitHubAPI constructor ([String token])
+    class GitCommand {
+        + String rootDir
+        + String owner
+        + String reponame
+
+        + constructor (String owner, String reponame)
+        + <<get>> String repoPath ()
+        + <<get>> String fullRepoPath ()
+        + <<get>> String getUri ()
+        + Boolean exists ()
+        + Promise<String> clone ()
+        + Promise<String> pull ()
+        + Promise<String> diff (String from, String to, String filename)
+        + Promise<ShowResponse> show (String revision = 'HEAD')
+        - Promise<String> exec (String command, String cwd = this.rootDir)
+        - String prettyDiff (String diffstr)
     }
+
+    class Wiki {
+        + String owner
+        + String reponame
+        + GitCommand git
+
+        + constructor (String owner, String reponame)
+        + Promise<String> cloneOrUpdateRepo ()
+        + Promise<String> show (String sha)
+    }
+
+    Wiki --> GitHub.GitCommand
+}
+
+namespace Util {
+    class DebounceQueue<Query, Key> {
+        - Number delay
+        - Func<Query, void> Callback
+        - Func<Query, Key> Iteratee
+        - Map<Key, Number> timeoutIds
+
+        + constructor (Number delay, Func<Query, void> callback,
+                     Func(Query, Key) iteratee)
+        + void push (Query query)
+        - void raise (Key key, Query query)
+    }
+
+    class GitHubToSlackQueue<Koa.Context, String> {
+        + constructor (Func<Koa.Context, void> callback)
+        - String contextToQueueKey (Koa.Context koa)
+    }
+
+    GitHubToSlackQueue --|> Util.DebounceQueue
 }
 @enduml
