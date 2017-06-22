@@ -8,7 +8,7 @@ import type { IssuesPayload } from '../../model/github/issues_payload';
 import type { MessageType } from '../../model/message_types';
 import type { Payload$User, Payload$Label, Payload$Milestone } from '../../model/github/payload';
 
-type PreBodyParams = {
+export type PreBodyParams = {
     body: boolean,
     milestone: boolean,
     assignees: boolean,

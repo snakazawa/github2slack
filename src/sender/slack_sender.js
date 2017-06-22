@@ -1,9 +1,10 @@
 // @flow
-import type Message from '../model/message';
-import rp from 'request-promise';
 
-import type { MessageType } from '../model/message_types';
+
+import rp from 'request-promise';
 import { messageTypes } from '../model/message_types';
+import type Message from '../model/message';
+import type { MessageType } from '../model/message_types';
 
 export default class SlackSender {
     _uri: string;
@@ -31,7 +32,7 @@ export default class SlackSender {
         return {
             attachments: [{
                 fallback: msg.fallback,
-                color: this.typeToColor(msg.type),
+                color: this._typeToColor(msg.type),
                 pretext: msg.title,
                 author_name: msg.username,
                 author_icon: msg.userIcon,
@@ -42,7 +43,7 @@ export default class SlackSender {
         };
     }
 
-    typeToColor (messageType: MessageType) {
+    _typeToColor (messageType: MessageType): ?string {
         switch (messageType) {
         case messageTypes.Default:
             return null;

@@ -1,8 +1,8 @@
 // @flow
 
 import DebounceQueue from './debounce_queue';
-import type { Context } from 'koa';
 import { IssuesPayload } from '../model/github/issues_payload';
+import type { Context } from 'koa';
 
 const DEFAULT_HOOK_DEBOUNCE_DELAY = 500;
 

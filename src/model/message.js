@@ -1,6 +1,7 @@
 // @flow
-import type { MessageType } from './message_types';
+
 import { messageTypes } from './message_types';
+import type { MessageType } from './message_types';
 
 export default class Message {
     _username: ?string;

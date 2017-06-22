@@ -14,14 +14,14 @@ const showDelimiter = '>>>>_____<<<<';
 const diffIndent = '  ';
 
 export default class GitCommand {
-    ROOT_DIR: string;
+    rootDir: string;
     owner: string;
     reponame: string;
 
     constructor (owner: string, reponame: string) {
         this.owner = owner;
         this.reponame = reponame;
-        this.ROOT_DIR = path.resolve(path.join(__dirname, '..', '..', 'user_git_repositories'));
+        this.rootDir = path.resolve(path.join(__dirname, '..', '..', 'user_git_repositories'));
     }
 
     exists (): boolean {
@@ -29,7 +29,7 @@ export default class GitCommand {
     }
 
     async clone (): Promise<string> {
-        return this._exec(`git clone ${this.gitUri} ${this.repoPath}`, this.ROOT_DIR);
+        return this._exec(`git clone ${this.gitUri} ${this.repoPath}`, this.rootDir);
     }
 
     async pull (): Promise<string> {
@@ -71,14 +71,14 @@ export default class GitCommand {
     }
 
     get fullRepoPath (): string {
-        return path.join(this.ROOT_DIR, this.repoPath);
+        return path.join(this.rootDir, this.repoPath);
     }
 
     get gitUri (): string {
         return `git@github.com:${this.owner}/${this.reponame}.git`;
     }
 
-    async _exec (command: string, cwd: string = this.ROOT_DIR): Promise<string> {
+    async _exec (command: string, cwd: string = this.rootDir): Promise<string> {
         return new Promise(resolve => {
             exec(command, {cwd}, (err, stdout, stderr) => {
                 if (err) {

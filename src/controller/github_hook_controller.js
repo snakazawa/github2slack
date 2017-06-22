@@ -1,25 +1,25 @@
 // @flow
 
+import GitHubToSlackQueue from '../util/github_to_slack_queue';
 import SerializerMaster from '../serializer/serializer_master';
 import SlackSender from '../sender/slack_sender';
 import type { Context } from 'koa';
-import GitHubToSlackQueue from '../util/github_to_slack_queue';
 
 export default class GitHubHookController {
-    queue: GitHubToSlackQueue;
-    serializer: SerializerMaster;
-    sender: SlackSender;
+    _queue: GitHubToSlackQueue;
+    _serializer: SerializerMaster;
+    _sender: SlackSender;
 
     constructor () {
-        this.queue = new GitHubToSlackQueue(this._githubToSlack.bind(this));
-        this.serializer = new SerializerMaster();
-        this.sender = new SlackSender();
+        this._queue = new GitHubToSlackQueue(this._githubToSlack.bind(this));
+        this._serializer = new SerializerMaster();
+        this._sender = new SlackSender();
     }
 
     async postIndex (ctx: Context): Promise<void> {
         const eventName = ctx.headers['x-github-event'];
-        if (this.serializer.isSupportEvent(eventName)) {
-            this.queue.push(ctx);
+        if (this._serializer.isSupportEvent(eventName)) {
+            this._queue.push(ctx);
             ctx.body = {message: 'Event was pushed to queue'};
         } else {
             ctx.body = {message: `${eventName} is unsupported event type`};
@@ -31,9 +31,9 @@ export default class GitHubHookController {
         (async () => {
             const eventName = ctx.headers['x-github-event'];
 
-            const msg = await this.serializer.serialize(eventName, ctx.request.body);
+            const msg = await this._serializer.serialize(eventName, ctx.request.body);
 
-            await this.sender.send(msg);
+            await this._sender.send(msg);
         })().catch(err => console.error(err)); // TODO: improve error handling
     }
 }

@@ -1,4 +1,5 @@
 // @flow
+
 import type Message from '../model/message';
 import type { Payload } from '../model/github/payload';
 
