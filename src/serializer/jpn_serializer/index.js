@@ -1,4 +1,5 @@
 // @flow
+
 import type { Serializers } from '../serializers_type';
 import IssuesSerializer from './issues_serializer';
 import IssueCommentSerializer from './issue_comment_serializer';

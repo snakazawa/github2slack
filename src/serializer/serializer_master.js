@@ -3,15 +3,9 @@
 import { IssuesPayload } from '../model/github/issues_payload';
 import { IssueCommentPayload } from '../model/github/issue_comment_payload';
 import { GollumPayload } from '../model/github/gollum_payload';
-import DefaultSerializer from './default_serializer';
-import JpnSerializer from './jpn_serializer';
 import type Message from '../model/message';
 import type { Serializers } from './serializers_type';
-
-const serializerPackages = {
-    DefaultSerializer: DefaultSerializer,
-    JpnSerializer: JpnSerializer
-};
+import serializerPackages from './serializer_packages';
 
 export default class SerializerMaster {
     packageName: string;
