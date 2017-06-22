@@ -9,37 +9,67 @@ Simply and customizable GitHub-Slack notifier.
 GitHubの通知をSlackに飛ばす通知システムです。  
 シンプルかつカスタマイズ性が高いのが特徴です。
 
-## Features
 
-### JpnSerializer
+## Serializer Packages
 
-日本語の通知を送ります。
+### DefaultSerializer
+
+Simple English serializer
 
 Support events:
 
 - [x] IssuesEvent
 - [x] IssueCommentEvent
 - [x] GollumEvent
-- [ ] (**TODO**) CommitCommentEvent
-- [ ] (**TODO**) PushEvent
-- [ ] (**TODO**) CreateEvent
-- [ ] (**TODO**) DeleteEvent
-- [ ] (**TODO**) LabelEvent
-- [ ] (**TODO**) MilestoneEvent
-- [ ] (**TODO**) ProjectCardEvent
-- [ ] (**TODO**) ProjectColumnEvent
-- [ ] (**TODO**) ProjectEvent
-- [ ] (**TODO**) PullRequestEvent
-- [ ] (**TODO**) PullRequestReviewEvent
-- [ ] (**TODO**) PullRequestReviewCommentEvent
+- [ ] CommitCommentEvent
+- [ ] PushEvent
+- [ ] CreateEvent
+- [ ] DeleteEvent
+- [ ] LabelEvent
+- [ ] MilestoneEvent
+- [ ] ProjectCardEvent
+- [ ] ProjectColumnEvent
+- [ ] ProjectEvent
+- [ ] PullRequestEvent
+- [ ] PullRequestReviewEvent
+- [ ] PullRequestReviewCommentEvent
+
+
+### JpnSerializer
+
+Japanese serializer
+
+Support events:
+
+- [x] IssuesEvent
+- [x] IssueCommentEvent
+- [x] GollumEvent
+- [ ] CommitCommentEvent
+- [ ] PushEvent
+- [ ] CreateEvent
+- [ ] DeleteEvent
+- [ ] LabelEvent
+- [ ] MilestoneEvent
+- [ ] ProjectCardEvent
+- [ ] ProjectColumnEvent
+- [ ] ProjectEvent
+- [ ] PullRequestEvent
+- [ ] PullRequestReviewEvent
+- [ ] PullRequestReviewCommentEvent
+
 
 ## Requirements
 
 - node: ~8.1.2
-- git
+- git (and authenticated user)
 
 
 ## Install
+
+**TODO**
+
+
+## Environment
 
 **TODO**
 

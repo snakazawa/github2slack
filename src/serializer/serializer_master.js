@@ -1,12 +1,15 @@
 // @flow
+
 import { IssuesPayload } from '../model/github/issues_payload';
 import { IssueCommentPayload } from '../model/github/issue_comment_payload';
 import { GollumPayload } from '../model/github/gollum_payload';
-import type Message from '../model/message';
+import DefaultSerializer from './default_serializer';
 import JpnSerializer from './jpn_serializer';
+import type Message from '../model/message';
 import type { Serializers } from './serializers_type';
 
 const serializerPackages = {
+    DefaultSerializer: DefaultSerializer,
     JpnSerializer: JpnSerializer
 };
 
@@ -15,7 +18,7 @@ export default class SerializerMaster {
     serializers: Serializers;
 
     constructor (packageName: ?string) {
-        this.packageName = packageName || 'JpnSerializer';
+        this.packageName = packageName || process.env.SERIALIZER || 'DefaultSerializer';
 
         const serializers = serializerPackages[this.packageName];
         if (!serializers) { throw new Error(`serializer package was not found: ${this.packageName}`); }
