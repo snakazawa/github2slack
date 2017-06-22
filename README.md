@@ -143,5 +143,3 @@ DefaultSerializer、JpnSerializer、またはそれらを継承したパッケ�
 ### Class Diagram
 
 ![Class Diagram](documents/class.png "Class Diagram")
-
-**TODO**
