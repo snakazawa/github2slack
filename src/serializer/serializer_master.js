@@ -5,6 +5,7 @@ import { IssueCommentPayload } from '../model/github/issue_comment_payload';
 import { GollumPayload } from '../model/github/gollum_payload';
 import { ProjectPayload } from '../model/github/project_payload';
 import { ProjectColumnPayload } from '../model/github/project_column_payload';
+import { ProjectCardPayload } from '../model/github/project_card_payload';
 import type Message from '../model/message';
 import type { Serializers } from './serializers_type';
 import serializerPackages from './serializer_packages';
@@ -62,6 +63,12 @@ export default class SerializerMaster {
                 throw new Error(`serializer was not found: ${this.packageName}.ProjectColumnEvent`);
             }
             return this.serializers.projectColumn.serialize(new ProjectColumnPayload(body));
+
+        case 'project_card':
+            if (!this.serializers.projectCard) {
+                throw new Error(`serializer was not found: ${this.packageName}.ProjectCardEvent`);
+            }
+            return this.serializers.projectCard.serialize(new ProjectCardPayload(body));
 
         // todo events
         case 'CommitCommentEvent': throw new Error(`serializer was not found: ${this.packageName}.CommitCommentEvent`);

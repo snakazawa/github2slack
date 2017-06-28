@@ -7,7 +7,7 @@ export default class ProjectColumnSerializer extends DefaultProjectColumnSeriali
         switch (action) {
         case 'created': return '新しいプロジェクトカラム';
         case 'edited': return 'プロジェクトカラムが編集されました';
-        case 'moved': return 'プロジェクトカラムが閉じられました';
+        case 'moved': return 'プロジェクトカラムが移動されました';
         case 'deleted': return 'プロジェクトカラムが削除されました';
         default: throw new Error(`unsupported action: ${action}`);
         }

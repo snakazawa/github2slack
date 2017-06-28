@@ -45,6 +45,14 @@ export type Payload$ProjectColumn = {
     project_url: string,
     cards_url: string
 }
+export type Payload$ProjectCard = {
+    url: string,
+    column_url: string,
+    content_url?: string,
+    id: number,
+    note?: string,
+    creator: Payload$User
+}
 
 export class Payload {
     repository: Payload$Repository;
