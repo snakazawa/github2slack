@@ -30,7 +30,14 @@ export type Payload$Page = {
     sha: string,
     html_url: string
 };
-
+export type Payload$Project = {
+    name: string,
+    body: string,
+    number: number,
+    state: 'open' | 'closed' | 'all',
+    creater: Payload$User,
+    html_url: string
+};
 
 export class Payload {
     repository: Payload$Repository;
