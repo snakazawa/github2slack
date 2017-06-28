@@ -1,7 +1,7 @@
 // @flow
 
 import rp from 'request-promise';
-import type { Payload$Project } from '../model/github/payload';
+import type { Payload$Issue, Payload$Project, Payload$ProjectColumn } from '../model/github/payload';
 
 export default class GitHubApi {
     userAgent: string;
@@ -22,6 +22,16 @@ export default class GitHubApi {
         return this._request('GET', uri, {
             Accept: 'application/vnd.github.inertia-preview+json'
         });
+    }
+
+    async getProjectColumnByUri (uri: string): Promise<Payload$ProjectColumn> {
+        return this._request('GET', uri, {
+            Accept: 'application/vnd.github.inertia-preview+json'
+        });
+    }
+
+    async getIssueByUri (uri: string): Promise<Payload$Issue> {
+        return this._request('GET', uri);
     }
 
     _defaultHeaders (): {

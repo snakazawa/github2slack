@@ -2,6 +2,7 @@
 
 import Message from '../../model/message';
 import { messageTypes } from '../../model/message_types';
+import GitHubApi from '../../util/github_api';
 import type { IDefaultSerializer } from './i_default_serializer';
 import type { ProjectCardPayload } from '../../model/github/project_card_payload';
 import type { MessageType } from '../../model/message_types';
@@ -20,10 +21,25 @@ export default class ProjectCardSerializer implements IDefaultSerializer<Project
 
     async _createTitle (payload: ProjectCardPayload): Promise<string> {
         const {name: reponame, html_url: repoUrl} = payload.repository;
-        const name = payload.project_card.note || payload.project_card.content_url || '';
+        const {content_url: contentApiUrl, column_url: columnApiUrl, note} = payload.project_card;
         const comment = this._createComment(payload.action);
+        const api = new GitHubApi();
 
-        return `[<${repoUrl}|${reponame}>] ${comment}: ${name}`;
+        const {name: columnName, project_url: projectApiUrl} = await api.getProjectColumnByUri(columnApiUrl);
+        const {name: projectName, html_url: projectUrl} = await api.getProjectByUri(projectApiUrl);
+
+        const prefix = `[<${repoUrl}|${reponame}>] ${comment}:`;
+        const suffix = `(on <${projectUrl}|${projectName}> project ${columnName} column)`;
+
+        if (contentApiUrl) {
+            const {html_url: url, number, title} = await api.getIssueByUri(contentApiUrl);
+
+            return `${prefix} <${url}|#${number} ${title}> ${suffix}`;
+        } else if (note) {
+            return `${prefix} ${note} ${suffix}`;
+        } else {
+            throw new Error('content_url and note were not found on project_card payload');
+        }
     }
 
     async _createBody (payload: ProjectCardPayload): Promise<string> {
