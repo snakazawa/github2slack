@@ -27,9 +27,9 @@ Support events:
 - [ ] DeleteEvent
 - [ ] LabelEvent
 - [ ] MilestoneEvent
-- [ ] ProjectCardEvent
-- [ ] ProjectColumnEvent
-- [ ] ProjectEvent
+- [x] ProjectCardEvent
+- [x] ProjectColumnEvent
+- [x] ProjectEvent
 - [ ] PullRequestEvent
 - [ ] PullRequestReviewEvent
 - [ ] PullRequestReviewCommentEvent
@@ -50,9 +50,9 @@ Support events:
 - [ ] DeleteEvent
 - [ ] LabelEvent
 - [ ] MilestoneEvent
-- [ ] ProjectCardEvent
-- [ ] ProjectColumnEvent
-- [ ] ProjectEvent
+- [x] ProjectCardEvent
+- [x] ProjectColumnEvent
+- [x] ProjectEvent
 - [ ] PullRequestEvent
 - [ ] PullRequestReviewEvent
 - [ ] PullRequestReviewCommentEvent
@@ -68,13 +68,14 @@ Support events:
 
 ```bash
 cp .env.default .env
-# Edit .env (See Environment sction on README)
+# Edit .env (See Environment section on README)
 
 npm install
 npm run build
 ```
 
-DefaultSerializer、JpnSerializer、またはそれらを継承したパッケージを使う場合は、実行するユーザーが git コマンドにより、連携する GitHub リポジトリにアクセスできるよう設定する必要があります。
+DefaultSerializer、JpnSerializer、またはそれらを継承したパッケージを使う場合は、実行するユーザーが git コマンドにより、連携する GitHub リポジトリにアクセスできるよう設定する必要があります。  
+他に、SlackのIncoming WebhooksのURIと、GitHubのアクセストークンを.envで指定してください。
 
 
 ## Serve
@@ -87,13 +88,16 @@ DefaultSerializer、JpnSerializer、またはそれらを継承したパッケ�
 
 .env を使って環境変数を設定できます。
 
-- SLACKBOT_URI: **(必須)** あなたのチームの Slack Incomming Webhook の URIを指定してください。 
-- QUEUE_DEBOUNCE_DELAY: Webhookが来てからそれを処理するまでのディレイ時間を指定できます(ms)。 
-時間内の似たようなイベントは、Util.GitHubToSlackQueueによってまとめられます。
-デフォルトは500ミリ秒です。
+- NAME: アプリケーション名です。デフォルトは"slack2github"です。
+- SLACKBOT_URI: **(必須)** あなたのチームの Slack Incomming Webhooks の URIを指定してください。
 - SERIALIZER: 使用するSerializerを指定します。 
 [Serializer Packages](#Serializer%20Packages)に記載されているパッケージ名か、自作パッケージ名を指定してください。
 デフォルトは[DefaultSerializer](#DefaultSerializer)です。
+- TIME_ZONE: タイムゾーンです。
+- TOKEN: **(必須)** GitHubのAccess Tokenです（参考: [Creating a personal access token for the command line \- User Documentation](https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/)。
+- QUEUE_DEBOUNCE_DELAY: Webhookが来てからそれを処理するまでのディレイ時間を指定できます(ms)。 
+時間内の似たようなイベントは、Util.GitHubToSlackQueueによってまとめられます。
+デフォルトは500ミリ秒です。
 - PORT: Webサーバーのポート番号です。デフォルトは3000です。
 
 
