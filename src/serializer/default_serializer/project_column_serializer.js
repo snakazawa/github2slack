@@ -2,6 +2,7 @@
 
 import Message from '../../model/message';
 import { messageTypes } from '../../model/message_types';
+import GitHubApi from '../../util/github_api';
 import type { IDefaultSerializer } from './i_default_serializer';
 import type { ProjectColumnPayload } from '../../model/github/project_column_payload';
 import type { MessageType } from '../../model/message_types';
@@ -20,10 +21,13 @@ export default class ProjectColumnSerializer implements IDefaultSerializer<Proje
 
     async _createTitle (payload: ProjectColumnPayload): Promise<string> {
         const {name: reponame, html_url: repoUrl} = payload.repository;
-        const {name} = payload.project_column;
+        const {project_url: projectApiUrl, name} = payload.project_column;
         const comment = this._createComment(payload.action);
 
-        return `[<${repoUrl}|${reponame}>] ${comment}: ${name}`;
+        const api = new GitHubApi();
+        const {name: projectName, html_url: projectUrl} = await api.getProjectByUri(projectApiUrl);
+
+        return `[<${repoUrl}|${reponame}>] ${comment}: ${name} (on <${projectUrl}|${projectName}> project)`;
     }
 
     async _createBody (payload: ProjectColumnPayload): Promise<string> {
