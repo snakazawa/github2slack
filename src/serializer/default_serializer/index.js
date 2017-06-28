@@ -5,10 +5,12 @@ import IssuesSerializer from './issues_serializer';
 import IssueCommentSerializer from './issue_comment_serializer';
 import GollumSerializer from './gollum_serializer';
 import ProjectSerializer from './project_serializer';
+import ProjectColumnSerializer from './project_column_serializer';
 
 export default ({
     issues: (new IssuesSerializer()),
     issueComment: (new IssueCommentSerializer()),
     gollum: (new GollumSerializer()),
-    project: (new ProjectSerializer())
+    project: (new ProjectSerializer()),
+    projectColumn: (new ProjectColumnSerializer())
 }: Serializers);

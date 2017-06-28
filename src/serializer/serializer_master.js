@@ -4,6 +4,7 @@ import { IssuesPayload } from '../model/github/issues_payload';
 import { IssueCommentPayload } from '../model/github/issue_comment_payload';
 import { GollumPayload } from '../model/github/gollum_payload';
 import { ProjectPayload } from '../model/github/project_payload';
+import { ProjectColumnPayload } from '../model/github/project_column_payload';
 import type Message from '../model/message';
 import type { Serializers } from './serializers_type';
 import serializerPackages from './serializer_packages';
@@ -52,9 +53,15 @@ export default class SerializerMaster {
 
         case 'project':
             if (!this.serializers.project) {
-                throw new Error(`serializer was not found: ${this.packageName}.GollumEvent`);
+                throw new Error(`serializer was not found: ${this.packageName}.ProjectEvent`);
             }
             return this.serializers.project.serialize(new ProjectPayload(body));
+
+        case 'project_column':
+            if (!this.serializers.projectColumn) {
+                throw new Error(`serializer was not found: ${this.packageName}.ProjectColumnEvent`);
+            }
+            return this.serializers.projectColumn.serialize(new ProjectColumnPayload(body));
 
         // todo events
         case 'CommitCommentEvent': throw new Error(`serializer was not found: ${this.packageName}.CommitCommentEvent`);
@@ -64,7 +71,6 @@ export default class SerializerMaster {
         case 'LabelEvent': throw new Error(`serializer was not found: ${this.packageName}.LabelEvent`);
         case 'MilestoneEvent': throw new Error(`serializer was not found: ${this.packageName}.MilestoneEvent`);
         case 'ProjectCardEvent': throw new Error(`serializer was not found: ${this.packageName}.ProjectCardEvent`);
-        case 'ProjectColumnEvent': throw new Error(`serializer was not found: ${this.packageName}.ProjectColumnEvent`);
         case 'PullRequestEvent': throw new Error(`serializer was not found: ${this.packageName}.PullRequestEvent`);
         case 'PullRequestReviewEvent': throw new Error(`serializer was not found: ${this.packageName}.PullRequestReviewEvent`);
         case 'PullRequestReviewCommentEvent': throw new Error(`serializer was not found: ${this.packageName}.PullRequestReviewCommentEvent`);

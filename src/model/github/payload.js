@@ -38,6 +38,13 @@ export type Payload$Project = {
     creater: Payload$User,
     html_url: string
 };
+export type Payload$ProjectColumn = {
+    id: number,
+    name: string,
+    url: string,
+    project_url: string,
+    cards_url: string
+}
 
 export class Payload {
     repository: Payload$Repository;
