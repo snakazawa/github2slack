@@ -76,6 +76,8 @@ export default class IssuesSerializer implements IDefaultSerializer<IssuesPayloa
                 } else if (payload.changes.title) {
                     const from = payload.changes.title.from;
                     res += `${from} -> ${title}`;
+                } else {
+                    res += body;
                 }
             } else {
                 res += body;
