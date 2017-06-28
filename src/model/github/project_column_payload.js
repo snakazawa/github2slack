@@ -6,7 +6,9 @@ import type { Payload$ProjectColumn } from './payload';
 export class ProjectColumnPayload extends Payload {
     action: 'created' | 'edited' | 'moved' | 'deleted';
     changes: ?{name: {from: string}};
+    // eslint-disable-next-line camelcase
     after_id: number;
+    // eslint-disable-next-line camelcase
     project_column: Payload$ProjectColumn;
 
     constructor (params: any = {}) {
