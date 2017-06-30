@@ -8,7 +8,7 @@ script:
     - npm i
     - npm run lint:all
     - npm run flow
-    - npm run test
+    - npm run coverage
     - npm run build
 
 after_success:
