@@ -1,0 +1,3 @@
+--require intelli-espower-loader
+--require babel-register
+--preserve-symlinks power-assert
