@@ -4,13 +4,12 @@ node_js:
 env:
     global:
         - NODE_ENV=test
-before_script:
-    - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-    - chmod +x ./cc-test-reporter
 script:
     - npm i
     - npm run lint:all
     - npm run flow
     - npm run test
     - npm run build
-    - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
+
+after_success:
+    - codeclimate-test-reporter < coverage/lcov.info

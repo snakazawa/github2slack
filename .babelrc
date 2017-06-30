@@ -1,4 +1,9 @@
 {
-  "presets": ["es2015", "flow", "power-assert"]
+  "presets": ["es2015", "flow", "power-assert"],
+  "env": {
+    "test": {
+      "plugins": ["istanbul"]
+    }
+  }
 }
 
