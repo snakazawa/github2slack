@@ -11,5 +11,6 @@ script:
     - npm i
     - npm run lint:all
     - npm run flow
+    - npm run test
     - npm run build
     - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
