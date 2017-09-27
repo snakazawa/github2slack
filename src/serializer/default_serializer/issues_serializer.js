@@ -44,14 +44,14 @@ export default class IssuesSerializer implements IDefaultSerializer<IssuesPayloa
         switch (payload.action) {
         case 'edited':
             if (!payload.changes) { return false; }
-            let ignore: boolean = false;
+            let need: boolean = true;
             if (payload.changes.body) {
-                ignore |= payload.changes.body.trim() !== payload.issue.body.trim();
+                need &= payload.changes.body.trim() !== payload.issue.body.trim();
             }
             if (payload.changes.title) {
-                ignore |= payload.changes.title.trim() !== payload.issue.title.trim();
+                need &= payload.changes.title.trim() !== payload.issue.title.trim();
             }
-            return ignore;
+            return !need;
         default:
             return false;
         }
