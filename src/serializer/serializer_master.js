@@ -28,6 +28,20 @@ export default class SerializerMaster {
         return keys.includes(camelEventName);
     }
 
+    async canIgnore (eventName: string, body: any): Promise<boolean> {
+        if (!body) {
+            throw new Error('invalid body: (empty)');
+        }
+
+        switch (eventName) {
+        case 'issues':
+            return this.serializers.issues &&
+                this.serializers.issues.canIgnore(new IssuesPayload(body));
+        default:
+            return false;
+        }
+    }
+
     async serialize (eventName: string, body: any): Promise<Message> {
         if (!body) {
             throw new Error('invalid body: (empty)');

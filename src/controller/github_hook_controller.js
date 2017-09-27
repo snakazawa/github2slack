@@ -31,6 +31,10 @@ export default class GitHubHookController {
         (async () => {
             const eventName = ctx.headers['x-github-event'];
 
+            if (await this._serializer.canIgnore(eventName, ctx.request.body)) {
+                return;
+            }
+
             const msg = await this._serializer.serialize(eventName, ctx.request.body);
 
             await this._sender.send(msg);

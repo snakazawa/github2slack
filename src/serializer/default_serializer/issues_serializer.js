@@ -40,6 +40,23 @@ export default class IssuesSerializer implements IDefaultSerializer<IssuesPayloa
         });
     }
 
+    async canIgnore (payload: IssuePayload): Promise<boolean> {
+        switch (payload.action) {
+        case 'edited':
+            if (!payload.changes) { return false; }
+            let ignore: boolean = false;
+            if (payload.changes.body) {
+                ignore |= payload.changes.body.trim() !== payload.issue.body.trim();
+            }
+            if (payload.changes.title) {
+                ignore |= payload.changes.title.trim() !== payload.issue.title.trim();
+            }
+            return ignore;
+        default:
+            return false;
+        }
+    }
+
     async _createTitle (payload: IssuesPayload): Promise<string> {
         const comment = this._createComment(payload.action);
         const {name: reponame, html_url: repoUrl} = payload.repository;
